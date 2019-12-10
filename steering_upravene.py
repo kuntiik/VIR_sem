@@ -5,6 +5,7 @@ import numpy as np
 
 path = "/local/temporary/audi/camera/"
 path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
+path_out = "labels/"
 def closest(lst, K):  
     return lst[min(range(len(lst)), key = lambda i: abs(lst[i]-K))] 
 
@@ -50,8 +51,13 @@ for name in sorted(os.listdir(path_pic)):
             w =  open(path_out + name, 'w')
             angle = data[str(found_time)]["steering_angle_calculated"]
             sign = data[str(found_time)]["steering_angle_calculated_sign"]
+            if sign == 0:
+                sign = -1
             final_angle = float(angle) * float(sign)
-            w.write(" {" + str(found_time) + ":{\"Angle\": " + final_angle + " }}" )
+            # print("angle", angle, "sign", sign,"final", final_angle)
+            #w.write(" {" "\"Angle\": " + str(final_angle) + " }\n" )
+            d = {"Angle": final_angle}
+            json.dump(d, w)
             w.close()
             # print(new_data)
             # print('\n')
