@@ -28,12 +28,12 @@ def load_data():
         img = cv2.resize(img, (im_w, im_h))
         pics.append(img)
         i += 1
-        if i == 200:
+        if i == 100:
 #TODO uncoment, just to speed things up
             break
-            # print(i)
+    pics = np.asarray(pics)
     elapsed1 = time.time() - st1
-    print(elapsed1)
+    print("time to get pictures: ",elapsed1, "s")
     i = 0
     st2 = time.time()
     for name in sorted(os.listdir(path_labels)):
@@ -41,12 +41,12 @@ def load_data():
         labels.append(json.load(f)['Angle'])
         f.close()
         i += 1
-        if i  ==  200:
-            print(i)
+        if i  ==  100:
 #TODO uncoment, just to speed things up
             break
+    labels = np.asarray(labels)
     elapsed2 = time.time() - st2
-    print(elapsed2)
+    print("time to get labels: ",elapsed2, "s")
     return pics, labels
 
 class Dataset(tdata.Dataset):
@@ -66,10 +66,26 @@ class Dataset(tdata.Dataset):
             'key':i,
         } 
 
-def main():
+def get_loader(bs = 8):
     data, labels = load_data()
-    dataset = Dataset(data, labels)
-    print(dataset[1])
+    border = int(data.shape[0]*4/5)
+    data_train, data_val = np.split(data, [border])
+    labels_train, labels_val = np.split(labels, [border])
+    dataset_tr = Dataset(data_train, labels_train)
+    dataset_val = Dataset(data_val, labels_val)
+    trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
+    val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
+    return trn_loader, val_loader
+def parse_args():
+    parser = argparse.ArgumentParser('Simple MNIST classifier')
+    parser.add_argument('--learning_rate', '-lr', default=0.00001, type=float)
+    parser.add_argument('--epochs', '-e', default=30, type=int)
+    parser.add_argument('--batch_size', '-bs', default=8, type=int)
+
+
+def  main():
+    args = parse_args()
+    trn_loader, val_loader = get_loader()
 
 if __name__ == "__main__":
     main()
