@@ -28,7 +28,7 @@ def load_data():
         img = cv2.resize(img, (im_w, im_h))
         pics.append(img)
         i += 1
-        if i == 1000:
+        if i == 200:
 #TODO uncoment, just to speed things up
             break
             # print(i)
@@ -41,7 +41,7 @@ def load_data():
         labels.append(json.load(f)['Angle'])
         f.close()
         i += 1
-        if i  ==  1000:
+        if i  ==  200:
             print(i)
 #TODO uncoment, just to speed things up
             break
@@ -52,8 +52,8 @@ def load_data():
 class Dataset(tdata.Dataset):
     def __init__(self, pics, labels):
         super().__init__()
-        self.pics = np.load(pics, mmap_mode='r')
-        self.labels = np.load(labels, mmap_mode='r')
+        self.pics = pics
+        self.labels = labels
 
     def __len__(self):
         return self.pics.shape[0]
@@ -61,10 +61,10 @@ class Dataset(tdata.Dataset):
     def __getitem__(self, i):
         return{
 #mby here should be transpose
-            'pic':np.asarray(self.pics[i]).astype('f4')/255,
-            'label':np.asarray(self.labels[i]).astype('f4'),
+            'pic':self.pics[i]/255,
+            'label':self.labels[i],
             'key':i,
-                               }
+        } 
 
 def main():
     data, labels = load_data()
