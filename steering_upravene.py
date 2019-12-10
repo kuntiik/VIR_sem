@@ -47,6 +47,12 @@ for name in sorted(os.listdir(path_pic)):
             #index = np.argmin(abs(frame_json['cam_tstamp'] - angle_timestamps))
             found_time=closest(time_steering, frame_json['cam_tstamp']) #finds closest timestamp in steerin.json to timestamp in image json
             new_data[frame_json['cam_tstamp']] = data[str(found_time)]  #priradi do dictionary new_data timestamp obrazku s daty jemu nejblizsimi
+            w =  open(path_out + name, 'w')
+            angle = data[str(found_time)]["steering_angle_calculated"]
+            sign = data[str(found_time)]["steering_angle_calculated_sign"]
+            final_angle = float(angle) * float(sign)
+            w.write(" {" + str(found_time) + ":{\"Angle\": " + final_angle + " }}" )
+            w.close()
             # print(new_data)
             # print('\n')
             #print(found_time)
