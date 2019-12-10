@@ -1,13 +1,15 @@
 import json
 import os
-import cv2
+# import cv2
 import numpy as np
 
+path = "/local/temporary/audi/camera/"
+path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
 def closest(lst, K):  
     return lst[min(range(len(lst)), key = lambda i: abs(lst[i]-K))] 
 
 #with open('bus_signals.json', 'r') as f: #tady spise steering.json
-with open('steering.json', 'r') as f:
+with open(path +'steering.json', 'r') as f:
     data = json.load(f)
 
 #data=sorted(data)
@@ -37,16 +39,16 @@ for key, value in data.items():
 angle_timestamps = np.array([*steering_data])
 '''
 new_data = {}
-for name in sorted(os.listdir('camera/cam_front_center')):
+for name in sorted(os.listdir(path_pic)):
     if name.endswith('.json'):
 
-        with open('camera/cam_front_center/' + name, 'r') as f:
+        with open(path_pic + name, 'r') as f:
             frame_json = json.load(f)
             #index = np.argmin(abs(frame_json['cam_tstamp'] - angle_timestamps))
             found_time=closest(time_steering, frame_json['cam_tstamp']) #finds closest timestamp in steerin.json to timestamp in image json
             new_data[frame_json['cam_tstamp']] = data[str(found_time)]  #priradi do dictionary new_data timestamp obrazku s daty jemu nejblizsimi
-            print(new_data)
-            print('\n')
+            # print(new_data)
+            # print('\n')
             #print(found_time)
             #index = 
 
@@ -54,7 +56,7 @@ for name in sorted(os.listdir('camera/cam_front_center')):
 
             #np.save('processed/' + frame_json['image_png'].split('_')[-1][:-4] + '.npy', frame)
 
-print(new_data)
+# print(new_data)
 #with open('steering.json', 'w') as g:
 #    json.dump(new_data, g)
 
