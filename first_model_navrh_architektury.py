@@ -61,6 +61,7 @@ class My_CNN(nn.Module):
         conv3 = nn.Conv2d(in_channels=60, out_channels = 90, kernel_size=3, stride=2, padding=0)
         self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(30),torch.nn.MaxPool2d(kernel_size=3), \
             conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(60),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU())  
+        print(xb.shape)
         self.fc1 = nn.Linear(239*3*150)
     def forward(self, xb):
         #xb = F.relu(self.conv1(xb))
@@ -108,6 +109,7 @@ def parse_args():
     parser.add_argument('--learning_rate', '-lr', default=0.00001, type=float)
     parser.add_argument('--epochs', '-e', default=30, type=int)
     parser.add_argument('--batch_size', '-bs', default=8, type=int)
+    return parser.parse_args()
 
 def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
     for epoch in range(epochs):
@@ -137,7 +139,7 @@ def evaluate(val_dl, model, epoch, loss_function):
 
 def  main():
     args = parse_args()
-
+    print(args)
     loss_fun = nn.MSELoss()
     trn_loader, val_loader = get_loader()
     model = My_CNN()
