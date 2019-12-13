@@ -56,18 +56,32 @@ def load_data():
 class My_CNN(nn.Module):
     def __int__(self):
         super().__init__()
-        conv1 = nn.Conv2d(in_channels=3, out_channels = 30, kernel_size=3, stride=2, padding=0)
-        conv2 = nn.Conv2d(in_channels=30, out_channels = 60, kernel_size=3, stride=2, padding=0)
-        conv3 = nn.Conv2d(in_channels=60, out_channels = 90, kernel_size=3, stride=2, padding=0)
-        self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(30),torch.nn.MaxPool2d(kernel_size=3), \
-            conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(60),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU())  
-        print(xb.shape)
+        s = 16
+        conv1 = nn.Conv2d(in_channels=3, out_channels = s, kernel_size=3, stride=2, padding=0)
+        conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=2, padding=0)
+        conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=2, padding=0)
+        conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=2, padding=0)
+        mp = nn.Maxpool2d(kernel_size = 2)
+
+        #self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(30),torch.nn.MaxPool2d(kernel_size=3), \
+        #    conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(60),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU())  
         self.fc1 = nn.Linear(239*3*150)
     def forward(self, xb):
         #xb = F.relu(self.conv1(xb))
-        xb = self.convs(xb)
+        xb = F.relu(self.conv1(xb))
+        xb = F.relu(self.conv2(xb))
+        xb = self.mp(xb)
+        xb = F.relu(self.conv3(xb))
+        xb = F.relu(self.conv4(xb))
+        xb = self.mp(xb)
+        print(xb.shape)
         xb = self.fc1(xb)
         return xb
+
+    def weights_initialization(self):
+        for layer in self.named_parameters():
+            if type(layer) in {nn.Conv2d, nn.ConvTranspose2d}:
+                nn.init.xavier_uniform_(layer.weight.data, gain=torch.sqrt(2))
 
 class Dataset(tdata.Dataset):
     def __init__(self, pics, labels):
@@ -143,6 +157,7 @@ def  main():
     loss_fun = nn.MSELoss()
     trn_loader, val_loader = get_loader()
     model = My_CNN()
+    model.weights_initialization()
     model = model.to(dev)
     opt = torch.optim.Adam(model.parameters(), args.learning_rate)
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
