@@ -17,6 +17,7 @@ path = "/local/temporary/audi/camera/"
 # path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
 path_pic = "audi/camera/camera/cam_front_center/"
 path_labels = "labels/"
+s = 16
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -55,13 +56,12 @@ def load_data():
 
 class My_CNN(nn.Module):
     def __int__(self):
-        super().__init__()
-        s = 16
-        conv1 = nn.Conv2d(in_channels=3, out_channels = s, kernel_size=3, stride=2, padding=0)
-        conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=2, padding=0)
-        conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=2, padding=0)
-        conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=2, padding=0)
-        mp = nn.Maxpool2d(kernel_size = 2)
+        super(My_CNN, self).__init__()
+        self.conv1 = Conv2d(in_channels=3, out_channels = s, kernel_size=3, stride=2, padding=0)
+        self.conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=2, padding=0)
+        self.conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=2, padding=0)
+        self.conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=2, padding=0)
+        self.mp = nn.Maxpool2d(kernel_size = 2)
 
         #self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(30),torch.nn.MaxPool2d(kernel_size=3), \
         #    conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(60),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU())  
@@ -159,6 +159,8 @@ def  main():
     model = My_CNN()
     model.weights_initialization()
     model = model.to(dev)
+    # m_params = list(model.parameters())
+    # opt = torch.optim.Adam(m_params, args.learning_rate)
     opt = torch.optim.Adam(model.parameters(), args.learning_rate)
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
 
