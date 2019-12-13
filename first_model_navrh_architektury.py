@@ -86,7 +86,7 @@ class Dataset(tdata.Dataset):
         } 
 
 def loss_batch(model, loss_function, data, labels, opt = None):
-    loss = loss_function(model(data), y_batch)
+    loss = loss_function(model(data), labels)
     if opt is not None:
         loss.backward()
         opt.step()
@@ -109,12 +109,12 @@ def parse_args():
     parser.add_argument('--epochs', '-e', default=30, type=int)
     parser.add_argument('--batch_size', '-bs', default=8, type=int)
 
-def fit(train_dl, val_dl, model, opt, loss_fun):
+def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
     for epoch in range(epochs):
         for data, label in train_dl:
             data = data.to(dev)
             label = data.to(dev)
-            loss_batch(model, loss_function, data, label, opt)
+            loss_batch(model, loss_fun, data, label, opt)
 
        # with torch.no_grad():
             #TODO evaluate loss in training
@@ -139,10 +139,11 @@ def  main():
     args = parse_args()
 
     loss_fun = nn.MSELoss()
-    #trn_loader, val_loader = get_loader()
+    trn_loader, val_loader = get_loader()
     model = My_CNN()
     model = model.to(dev)
-   # opt = torch.optim.Adam(model.parameters(), args.learning_rate)
+    opt = torch.optim.Adam(model.parameters(), args.learning_rate)
+    fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
 
 if __name__ == "__main__":
     main()
