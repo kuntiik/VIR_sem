@@ -68,8 +68,9 @@ class My_CNN(torch.nn.Module):
         self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(s),torch.nn.MaxPool2d(kernel_size=3), \
             conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(2*s),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU()), torch.nn.BatchNorm2d(4*s), \
             conv4, torch.nn.ReLU()
-        self.fc1 = nn.Linear(239*3*150)
+        self.fc1 = nn.Linear(239*150, 1)
     def forward(self, xb):
+        print(xb.shape)
         #xb = F.relu(self.conv1(xb))
         #xb = F.relu(self.conv1(xb))
         #xb = F.relu(self.conv2(xb))
@@ -77,8 +78,8 @@ class My_CNN(torch.nn.Module):
         #xb = F.relu(self.conv3(xb))
         #xb = F.relu(self.conv4(xb))
         #xb = self.mp(xb)
-        #print(xb.shape)
         xb=self.convs(xb)
+        print(xb.shape)
         xb = self.fc1(xb)
         return xb
 
@@ -99,8 +100,11 @@ class Dataset(tdata.Dataset):
     def __getitem__(self, i):
         return{
 #mby here should be transpose
-            'pic':self.pics[i]/255,
-            'label':self.labels[i],
+            # 'pic':self.pics[i]/255,
+            # 'label':self.labels[i],
+            # 'key':i,
+            'labels':np.asarray(self.labels[i]).astype('f4'),
+            'rgbs':np.asarray(self.pics[i]).astype('f4')/255,
             'key':i,
         } 
 
@@ -121,6 +125,7 @@ def get_loader(bs = 8):
     dataset_val = Dataset(data_val, labels_val)
     trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
     val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
+    # print(trn_loader.shape)
     return trn_loader, val_loader
 def parse_args():
     parser = argparse.ArgumentParser('Simple MNIST classifier')
@@ -131,7 +136,11 @@ def parse_args():
 
 def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
     for epoch in range(epochs):
-        for data, label in train_dl:
+        for batch in train_dl:
+            data = batch['rgbs']
+            labels = batch['labels']
+            key = batch['key']
+            print(data.shape)
             data = data.to(dev)
             label = data.to(dev)
             loss_batch(model, loss_fun, data, label, opt)
@@ -144,7 +153,11 @@ def evaluate(val_dl, model, epoch, loss_function):
     with torch.no_grad():
         acc = 0
         processed = 0 
-        for data, labels in val_dl:
+        for batch in val_dl:
+            data = batch['rgbs']
+            labels = batch['labels']
+            #key not needed yet
+            key = batch['key']
             data = data.to(dev)
             labels = labels.to(dev)
             value, num = loss_batch(model, loss_function, data, labels)
