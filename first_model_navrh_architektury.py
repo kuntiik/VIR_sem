@@ -14,8 +14,8 @@ import torchvision
 WIDTH = 1920
 HEIGHT = 1208
 path = "/local/temporary/audi/camera/"
-# path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
-path_pic = "audi/camera/camera/cam_front_center/"
+path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
+#path_pic = "audi/camera/camera/cam_front_center/"
 path_labels = "labels/"
 s = 16
 
@@ -29,13 +29,14 @@ def load_data():
     i = 0 
     st1 = time.time()
     for name in sorted(os.listdir(path_pic)):
-        img = cv2.imread(os.path.join(path_pic, name))
-        img = cv2.resize(img, (im_w, im_h))
-        pics.append(img)
-        i += 1
-        if i == 100:
-#TODO uncoment, just to speed things up
-            break
+        if name.endswith('.png'):
+            img = cv2.imread(os.path.join(path_pic, name))
+            img = cv2.resize(img, (im_w, im_h))
+            pics.append(img)
+            i += 1
+            if i == 100:
+    #TODO uncoment, just to speed things up
+                break
     pics = np.asarray(pics)
     elapsed1 = time.time() - st1
     print("time to get pictures: ",elapsed1, "s")
@@ -54,27 +55,30 @@ def load_data():
     print("time to get labels: ",elapsed2, "s")
     return pics, labels
 
-class My_CNN(nn.Module):
-    def __int__(self):
+class My_CNN(torch.nn.Module):
+    def __init__(self):
         super(My_CNN, self).__init__()
-        self.conv1 = Conv2d(in_channels=3, out_channels = s, kernel_size=3, stride=2, padding=0)
-        self.conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=2, padding=0)
-        self.conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=2, padding=0)
-        self.conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=2, padding=0)
-        self.mp = nn.Maxpool2d(kernel_size = 2)
+        #super().__init__()
+        conv1 = nn.Conv2d(in_channels=3, out_channels = s, kernel_size=3, stride=2, padding=0)
+        conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=2, padding=0)
+        conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=2, padding=0)
+        conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=2, padding=0)
+        #self.mp = nn.Maxpool2d(kernel_size = 2)
 
-        #self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(30),torch.nn.MaxPool2d(kernel_size=3), \
-        #    conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(60),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU())  
+        self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(s),torch.nn.MaxPool2d(kernel_size=3), \
+            conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(2*s),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU()), torch.nn.BatchNorm2d(4*s), \
+            conv4, torch.nn.ReLU()
         self.fc1 = nn.Linear(239*3*150)
     def forward(self, xb):
         #xb = F.relu(self.conv1(xb))
-        xb = F.relu(self.conv1(xb))
-        xb = F.relu(self.conv2(xb))
-        xb = self.mp(xb)
-        xb = F.relu(self.conv3(xb))
-        xb = F.relu(self.conv4(xb))
-        xb = self.mp(xb)
-        print(xb.shape)
+        #xb = F.relu(self.conv1(xb))
+        #xb = F.relu(self.conv2(xb))
+        #xb = self.mp(xb)
+        #xb = F.relu(self.conv3(xb))
+        #xb = F.relu(self.conv4(xb))
+        #xb = self.mp(xb)
+        #print(xb.shape)
+        xb=self.convs(xb)
         xb = self.fc1(xb)
         return xb
 
@@ -157,11 +161,14 @@ def  main():
     loss_fun = nn.MSELoss()
     trn_loader, val_loader = get_loader()
     model = My_CNN()
-    model.weights_initialization()
+    #model_params = list(model.parameters())
+    #model.weights_initialization()
     model = model.to(dev)
     # m_params = list(model.parameters())
     # opt = torch.optim.Adam(m_params, args.learning_rate)
     opt = torch.optim.Adam(model.parameters(), args.learning_rate)
+    #opt = torch.optim.Adam(model_params, args.learning_rate)
+    #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
 
 if __name__ == "__main__":
