@@ -73,17 +73,18 @@ class My_CNN(torch.nn.Module):
 #        self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(s),torch.nn.MaxPool2d(kernel_size=3), \
 #           conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(2*s),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU()), torch.nn.BatchNorm2d(4*s), \
 #            conv4, torch.nn.ReLU()
-        self.fc1 = nn.Linear(128*2*1, 1)
+        self.fc1 = nn.Linear(64*6*3, 1)
     def forward(self, xb):
-        print(xb.shape)
+        # print(xb.shape)
         xb = self.pool(self.bn1(F.relu(self.conv1(xb))))
-        print(xb.shape,"shape after convs")
+        # print(xb.shape,"shape after convs")
         xb = self.pool(self.bn2(F.relu(self.conv2(xb))))
-        print(xb.shape,"shape after convs")
+        # print(xb.shape,"shape after convs")
         xb = self.bn3(F.relu(self.conv3(xb)))
-        print(xb.shape,"shape after convs")
-        xb = F.relu(self.conv4(xb))
-        print(xb.shape,"shape after convs")
+        # print(xb.shape,"shape after convs")
+#TODO size is too small ( i think 20*15 should be ideal) and now we have 2*1 :D
+        # xb = F.relu(self.conv4(xb))
+        # print(xb.shape,"shape after convs")
         #xb = F.relu(self.conv1(xb))
         #xb = F.relu(self.conv2(xb))
         #xb = self.mp(xb)
@@ -91,7 +92,7 @@ class My_CNN(torch.nn.Module):
         #xb = F.relu(self.conv4(xb))
         #xb = self.mp(xb)
         #xb=self.convs(xb)
-        xb = xb.view(-1, 128*2*1)
+        xb = xb.view(-1, 64*6*3)
         xb = self.fc1(xb)
         return xb
 
@@ -121,7 +122,11 @@ class Dataset(tdata.Dataset):
         } 
 
 def loss_batch(model, loss_function, data, labels, opt = None):
-    loss = loss_function(model(data), labels)
+    # model_res = model(data)
+    # print(model_res.shape)
+    # print(labels.shape)
+    loss = loss_function(model(data).flatten(), labels)
+    # print("went thru model")
     if opt is not None:
         loss.backward()
         opt.step()
@@ -130,7 +135,7 @@ def loss_batch(model, loss_function, data, labels, opt = None):
 
 def get_loader(bs = 8):
     data, labels = load_data()
-    print(data.shape)
+    # print(data.shape)
     border = int(data.shape[0]*4/5)
     data_train, data_val = np.split(data, [border])
     labels_train, labels_val = np.split(labels, [border])
@@ -150,19 +155,25 @@ def parse_args():
 
 def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
     for epoch in range(epochs):
+        acc = 0
+        processed = 0
         for batch in train_dl:
             data = batch['rgbs']
             labels = batch['labels']
             key = batch['key']
-            print(data.shape)
+            # print(data.shape)
             data = data.to(dev)
-            label = data.to(dev)
-            loss_batch(model, loss_fun, data, label, opt)
+            labels = labels.to(dev)
+            loss_batch(model, loss_fun, data, labels, opt)
+            with torch.no_grad():
+                value, num = loss_batch(model, loss_fun, data, labels)
+                acc = (num*value + processed * acc)/(num + processed)
+                processed += num
+        print("Epoch: {}/{} \t Training set accuracy: {:.5f}".format(epoch+1, epochs, acc))
 
-       # with torch.no_grad():
-            #TODO evaluate loss in training
-        
-def evaluate(val_dl, model, epoch, loss_function):
+        evaluate(val_dl, model, epoch, epochs, loss_fun)
+
+def evaluate(val_dl, model, epoch, epochs, loss_function):
 
     with torch.no_grad():
         acc = 0
@@ -177,14 +188,14 @@ def evaluate(val_dl, model, epoch, loss_function):
             value, num = loss_batch(model, loss_function, data, labels)
             acc = (num*value + processed * acc)/(num + processed)
             processed += num
-    print(acc)
+    print("Epoch: {}/{} \t Validation set accuracy: {:.5f}".format(epoch+1, epochs, acc))
 #just squared error averaged over the validation set
 
 
 
 def  main():
     args = parse_args()
-    print(args)
+    # print(args)
     loss_fun = nn.MSELoss()
     trn_loader, val_loader = get_loader()
     model = My_CNN()
