@@ -1,4 +1,4 @@
-
+j
 import numpy as np 
 import argparse 
 import json
@@ -18,7 +18,7 @@ path = "/local/temporary/audi/camera/"
 path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
 #path_pic = "audi/camera/camera/cam_front_center/"
 path_labels = "labels/"
-s = 16
+s = 32
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -60,15 +60,20 @@ class My_CNN(torch.nn.Module):
     def __init__(self):
         super(My_CNN, self).__init__()
         #super().__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels = s, kernel_size=3, stride=2, padding=0)
-        self.conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=2, padding=0)
-        self.conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=2, padding=0)
-        self.conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=2, padding=0)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels = s, kernel_size=5, stride=1, padding=0)
+        self.conv11 = nn.Conv2d(in_channels=s, out_channels = s, kernel_size=3, stride=1, padding=0)
+        self.conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=1, padding=0)
+        self.conv22 = nn.Conv2d(in_channels=2*s, out_channels = 2*s, kernel_size=3, stride=1, padding=0)
+        self.conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=1, padding=0)
+        self.conv33 = nn.Conv2d(in_channels=4*s, out_channels = 4*s, kernel_size=3, stride=1, padding=0)
+        self.conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=1, padding=0)
+        self.conv5 = nn.Conv2d(in_channels=8*s, out_channels = 16*s, kernel_size=3, stride=1, padding=0)
         #self.mp = nn.Maxpool2d(kernel_size = 2)
         self.bn1=torch.nn.BatchNorm2d(s)
         self.bn2=torch.nn.BatchNorm2d(2*s)
         self.bn3=torch.nn.BatchNorm2d(4*s)
-        self.pool=torch.nn.MaxPool2d(kernel_size=3)
+        self.bn4=torch.nn.BatchNorm2d(8*s)
+        self.pool=torch.nn.MaxPool2d(kernel_size=2)
 #
 #        self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(s),torch.nn.MaxPool2d(kernel_size=3), \
 #           conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(2*s),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU()), torch.nn.BatchNorm2d(4*s), \
@@ -76,11 +81,15 @@ class My_CNN(torch.nn.Module):
         self.fc1 = nn.Linear(64*6*3, 1)
     def forward(self, xb):
         # print(xb.shape)
-        xb = self.pool(self.bn1(F.relu(self.conv1(xb))))
-        # print(xb.shape,"shape after convs")
-        xb = self.pool(self.bn2(F.relu(self.conv2(xb))))
-        # print(xb.shape,"shape after convs")
-        xb = self.bn3(F.relu(self.conv3(xb)))
+        xb = F.relu(self.conv1(xb))
+        xb = self.pool(self.bn1(F.relu(self.conv11(xb))))
+        xb = F.relu(self.conv2(xb))
+        xb = self.pool(self.bn2(F.relu(self.conv22(xb))))
+        xb = F.relu(self.conv3(xb))
+        xb = self.pool(self.bn3(F.relu(self.conv33(xb))))
+        xb = self.pool(self.bn4(F.relu(self.conv4(xb))))
+        xb = self.pool(F.relu(self.conv5(xb)))
+        print(xb.shape,"shape after convs")
         # print(xb.shape,"shape after convs")
 #TODO size is too small ( i think 20*15 should be ideal) and now we have 2*1 :D
         # xb = F.relu(self.conv4(xb))
