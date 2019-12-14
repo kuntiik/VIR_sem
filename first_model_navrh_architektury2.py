@@ -35,7 +35,7 @@ def load_data():
             img = cv2.resize(img, (im_w, im_h))
             pics.append(img.transpose(2,1,0))
             i += 1
-            if i == 100:
+            if i == 300:
     #TODO uncoment, just to speed things up
                 break
     pics = np.asarray(pics)
@@ -48,7 +48,7 @@ def load_data():
         labels.append(json.load(f)['Angle'])
         f.close()
         i += 1
-        if i  ==  100:
+        if i  ==  300:
 #TODO uncoment, just to speed things up
             break
     labels = np.asarray(labels)
@@ -126,6 +126,7 @@ def loss_batch(model, loss_function, data, labels, opt = None):
     # print(model_res.shape)
     # print(labels.shape)
     loss = loss_function(model(data).flatten(), labels)
+    # print(loss, end =" " )
     # print("went thru model")
     if opt is not None:
         loss.backward()
@@ -133,7 +134,7 @@ def loss_batch(model, loss_function, data, labels, opt = None):
         opt.zero_grad()
     return loss.item(), len(data)
 
-def get_loader(bs = 8):
+def get_loader(bs = 8, opt = False):
     data, labels = load_data()
     # print(data.shape)
     border = int(data.shape[0]*4/5)
@@ -141,11 +142,22 @@ def get_loader(bs = 8):
     labels_train, labels_val = np.split(labels, [border])
     dataset_tr = Dataset(data_train, labels_train)
     dataset_val = Dataset(data_val, labels_val)
-    trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
+    if opt: 
+        trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
+        val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
+
+#some validation (just need some data from loader)
+        dataset_tr_tst = Dataset(data_train[1:10], labels_train[1:10])
+        dataset_val_tst = Dataset(data_val[1:10], labels_val[1:10])
+        tst_trn_loader = tdata.DataLoader(dataset_tr_tst, batch_size = 1, shuffle = True)
+        tst_val_loader = tdata.DataLoader(dataset_val_tst, batch_size = 1)
+        return trn_loader, val_loader, tst_trn_loader, tst_val_loader
     
-    val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
-    # print(trn_loader.shape)
-    return trn_loader, val_loader
+    else:
+        trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
+        val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
+        return trn_loader, val_loader
+
 def parse_args():
     parser = argparse.ArgumentParser('Simple MNIST classifier')
     parser.add_argument('--learning_rate', '-lr', default=0.00001, type=float)
@@ -157,7 +169,7 @@ def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
     for epoch in range(epochs):
         acc = 0
         processed = 0
-        for batch in train_dl:
+        for i,batch in enumerate(train_dl):
             data = batch['rgbs']
             labels = batch['labels']
             key = batch['key']
@@ -165,10 +177,12 @@ def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
             data = data.to(dev)
             labels = labels.to(dev)
             loss_batch(model, loss_fun, data, labels, opt)
+            # print(i, end=" ")
             with torch.no_grad():
                 value, num = loss_batch(model, loss_fun, data, labels)
                 acc = (num*value + processed * acc)/(num + processed)
                 processed += num
+
         print("Epoch: {}/{} \t Training set accuracy: {:.5f}".format(epoch+1, epochs, acc))
 
         evaluate(val_dl, model, epoch, epochs, loss_fun)
@@ -197,7 +211,13 @@ def  main():
     args = parse_args()
     # print(args)
     loss_fun = nn.MSELoss()
-    trn_loader, val_loader = get_loader()
+    trn_loader, val_loader, t_tst, v_tst = get_loader(8, True)
+    # t_tst, v_tst = get_loader(1)
+    for example in t_tst:
+        tst = example["rgbs"].to(dev)
+        lab = example["labels"].to(dev)
+        break
+
     model = My_CNN()
     #model_params = list(model.parameters())
     #model.weights_initialization()
@@ -207,7 +227,10 @@ def  main():
     opt = torch.optim.Adam(model.parameters(), args.learning_rate)
     #opt = torch.optim.Adam(model_params, args.learning_rate)
     #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
+    o1 = model(tst)
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
+    o2 = model(tst)
+    print(o1, o2, lab)
 
 if __name__ == "__main__":
     main()
