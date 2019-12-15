@@ -199,7 +199,7 @@ def get_loader(bs = 8, opt = False):
         tmp_arr.append(0)
     for i in range(t_num):
         for j in range(15):
-            tmp_arr[j] = data_train[i*15 +j]
+            tmp_arr[j] = data_train[i+j]
         stack = np.stack(tmp_arr, axis=0)
         train_stacked.append(stack)
     labels_train = labels_train[7:t_size-7]
