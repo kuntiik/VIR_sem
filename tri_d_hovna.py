@@ -212,7 +212,7 @@ def get_loader(bs = 8, opt = False):
         val_stacked.append(stack)
     labels_val = labels_val[7:t_size-7]
 
-    print(train_stacked.shape, val_stacked.shape)
+    print(np.shape(train_stacked), np.shape(val_stacked))
     print(labels_train.shape)
     dataset_tr = Dataset(data_train, labels_train)
     dataset_val = Dataset(data_val, labels_val)
