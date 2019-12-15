@@ -76,8 +76,8 @@ def load_data():
     i = 0
     st2 = time.time()
 
-    for i in range(220):
-        freq_checker.append(0)
+    for k in range(220):
+        freq_checker[k]=0
     for name in sorted(os.listdir(path_labels)):
         freq_checker[json_freq[i]] += 1
         if freq_checker[json_freq[i]] < 800:
@@ -206,8 +206,8 @@ def get_loader(bs = 8, opt = False):
 
 def parse_args():
     parser = argparse.ArgumentParser('Simple MNIST classifier')
-    parser.add_argument('--learning_rate', '-lr', default=0.00001, type=float)
-    parser.add_argument('--epochs', '-e', default=30, type=int)
+    parser.add_argument('--learning_rate', '-lr', default=0.0001, type=float)
+    parser.add_argument('--epochs', '-e', default=50, type=int)
     parser.add_argument('--batch_size', '-bs', default=8, type=int)
     return parser.parse_args()
 
@@ -264,10 +264,10 @@ def  main():
         lab = example["labels"].to(dev)
         break
 
-    for example in v_tst:
-        tst_v = example["rgbs"].to(dev)
-        lab_v = example["labels"].to(dev)
-        break
+    #for example in v_tst:
+       # tst_v = example["rgbs"].to(dev)
+        #lab_v = example["labels"].to(dev)
+        #break
 
     model = My_CNN()
     #model_params = list(model.parameters())
@@ -275,7 +275,7 @@ def  main():
     model = model.to(dev)
     # m_params = list(model.parameters())
     # opt = torch.optim.Adam(m_params, args.learning_rate)
-    opt = torch.optim.Adam(model.parameters(), args.learning_rate)
+    opt = torch.optim.Adam(model.parameters(), args.learning_rate, amsgrad=True)
     #opt = torch.optim.Adam(model_params, args.learning_rate)
     #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
     o1 = model(tst)
