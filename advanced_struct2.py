@@ -20,6 +20,7 @@ path_labels = "labels/"
 s = 32
 lin_s = 256*12*7
 PIC_NUM = 15695
+PIC_NUM_t = 15500
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -48,7 +49,7 @@ def load_data():
     labels = []
     im_w = 480
     im_h = 302
-    i = 0 
+    q = 0 
     st1 = time.time()
     freq, json_freq=get_frequency()
     freq_checker=[]
@@ -65,15 +66,15 @@ def load_data():
                 pics.append(img.transpose(2,1,0))
             else:
                 print("Neresim, uz te mam dost!")
-            i += 1
-            if i == PIC_NUM:
+            q += 1
+            if q == PIC_NUM_t:
     #TODO uncoment, just to speed things up
                 break
     print("Pocet obrazku je: ", len(pics))
     pics = np.asarray(pics)
     elapsed1 = time.time() - st1
     print("time to get pictures: ",elapsed1, "s")
-    i = 0
+    q = 0
     st2 = time.time()
 
     for i in range(220):
@@ -84,8 +85,8 @@ def load_data():
             f = open(path_labels + name, "rb")
             labels.append(json.load(f)['Angle'])
             f.close()
-        i += 1
-        if i  ==  PIC_NUM:
+        q += 1
+        if q  ==  PIC_NUM_t:
 #TODO uncoment, just to speed things up
             break
     labels = np.asarray(labels)
@@ -258,16 +259,21 @@ def  main():
     # print(args)
     loss_fun = nn.MSELoss()
     trn_loader, val_loader, t_tst, v_tst = get_loader(8, True)
+    print("nejaka delka", len(t_tst), len(v_tst))
     # t_tst, v_tst = get_loader(1)
     for example in t_tst:
         tst = example["rgbs"].to(dev)
         lab = example["labels"].to(dev)
         break
+    testv_data = []
+    testv_labels = []
+    print(v_tst)
+    for example2 in v_tst:
 
-    for example in v_tst:
-        tst_v = example["rgbs"].to(dev)
-        lab_v = example["labels"].to(dev)
-        break
+        tst_v = example2["rgbs"].to(dev)
+        lab_v = example2["labels"].to(dev)
+        testv_data.append(tst_v)
+        testv_labels.append(lab_v)
 
     model = My_CNN()
     #model_params = list(model.parameters())
@@ -279,9 +285,17 @@ def  main():
     #opt = torch.optim.Adam(model_params, args.learning_rate)
     #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
     o1 = model(tst)
+    res_before_training = []
+    res_after_training = []
+    for i in range(len(testv_data)):
+        res_before_training.append(model(testv_data[i]))
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
     o2 = model(tst)
+    for i in range(len(testv_data)):
+        res_after_training.append(model(testv_data[i]))
     print(o1, o2, lab)
+    for i in range(len(testv_data)):
+        print(res_before_training[i], res_after_training[i], testv_labels[i])
 
 if __name__ == "__main__":
     main()
