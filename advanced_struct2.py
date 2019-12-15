@@ -20,7 +20,6 @@ path_labels = "labels/"
 s = 32
 lin_s = 256*12*7
 PIC_NUM = 15695
-PIC_NUM_t = 100
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -53,7 +52,7 @@ def load_data():
     st1 = time.time()
     freq, json_freq=get_frequency()
     freq_checker=[]
-    for k in range(220):
+    for i in range(220):
         freq_checker.append(0)
 
     for name in sorted(os.listdir(path_pic)):
@@ -66,9 +65,8 @@ def load_data():
                 pics.append(img.transpose(2,1,0))
             else:
                 print("Neresim, uz te mam dost!")
-            i += 1 
-            print(i)
-            if i == PIC_NUM_t:
+            i += 1
+            if i == PIC_NUM:
     #TODO uncoment, just to speed things up
                 break
     print("Pocet obrazku je: ", len(pics))
@@ -78,16 +76,16 @@ def load_data():
     i = 0
     st2 = time.time()
 
-    for n in range(220):
+    for i in range(220):
         freq_checker.append(0)
     for name in sorted(os.listdir(path_labels)):
-        freq_checker[json_freq[n]] += 1
-        if freq_checker[json_freq[n]] < 800:
+        freq_checker[json_freq[i]] += 1
+        if freq_checker[json_freq[i]] < 800:
             f = open(path_labels + name, "rb")
             labels.append(json.load(f)['Angle'])
             f.close()
         i += 1
-        if i  ==  PIC_NUM_t:
+        if i  ==  PIC_NUM:
 #TODO uncoment, just to speed things up
             break
     labels = np.asarray(labels)
@@ -281,12 +279,9 @@ def  main():
     #opt = torch.optim.Adam(model_params, args.learning_rate)
     #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
     o1 = model(tst)
-    v1 = model(tst_v)
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
     o2 = model(tst)
-    v2 = model(tst_v)
-    print("results on training set", o1, o2, lab)
-    print("resuls on validation set", v1, v2, lab_v)
+    print(o1, o2, lab)
 
 if __name__ == "__main__":
     main()
