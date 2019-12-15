@@ -186,10 +186,33 @@ def get_loader(bs = 8, opt = False):
     print(data.shape)
     # print(data.shape)
     border = int(data.shape[0]*4/5)
-    np.random.shuffle(data)
     data_train, data_val = np.split(data, [border])
-    print(data_train.shape, data_val.shape)
     labels_train, labels_val = np.split(labels, [border])
+    print("data train shape je", data_train.shape)
+    t_size = data_train.shape[0]
+    v_size = data_val.shape[0]
+    t_num = t_size - 14
+    v_num = v_size - 14
+    tmp_arr = []
+    train_stacked = []
+    for i in range(15):
+        tmp_arr.append(0)
+    for i in range(t_num):
+        for j in range(15):
+            tmp_arr[j] = data_train[i*15 +j]
+        stack = np.stack(tmp_arr, axis=0)
+        train_stacked.append(stack)
+    labels_train = labels_train[7:t_size-7]
+    
+    val_stacked = []
+    for i in range(t_num):
+        for j in range(15):
+            tmp_arr[j] = data_val[i*15 +j]
+        stack = np.stack(tmp_arr, axis=0)
+        val_stacked.append(stack)
+    labels_val = labels_val[7:t_size-7]
+
+    print(train_stacked.shape, val_stacked.shape)
     dataset_tr = Dataset(data_train, labels_train)
     dataset_val = Dataset(data_val, labels_val)
     if opt: 
