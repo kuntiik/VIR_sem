@@ -20,8 +20,8 @@ path_labels = "labels/"
 s = 32
 lin_s = 256*12*7
 PIC_NUM = 15697
-PIC_NUM_t = 15697
-# PIC_NUM_t = 500
+# PIC_NUM_t = 15697
+PIC_NUM_t = 100
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -182,6 +182,7 @@ def loss_batch(model, loss_function, data, labels, opt = None):
 
 def get_loader(bs = 8, opt = False):
     data, labels = load_data()
+    print(data)
     print(data.shape)
     # print(data.shape)
     border = int(data.shape[0]*4/5)

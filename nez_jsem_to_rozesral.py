@@ -22,7 +22,6 @@ lin_s = 256*12*7
 PIC_NUM = 15697
 # PIC_NUM_t = 15697
 PIC_NUM_t = 100
-PIC_NUM = 15695
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -68,13 +67,8 @@ def load_data():
                 pics.append(img.transpose(2,1,0))
             i += 1
             if i == PIC_NUM_t:
-                break
-            else:
-                print("Neresim, uz te mam dost!")
-            i += 1
-            # if i == PIC_NUM:
     #TODO uncoment, just to speed things up
-                # break
+                break
     print("Pocet obrazku je: ", len(pics))
     pics = np.asarray(pics)
     elapsed1 = time.time() - st1
@@ -84,8 +78,6 @@ def load_data():
 
     for l in range(220):
         freq_checker[l] = 0
-    for k in range(220):
-        freq_checker[k]=0
     for name in sorted(os.listdir(path_labels)):
         freq_checker[json_freq[i]] += 1
         if freq_checker[json_freq[i]] < 800:
@@ -190,7 +182,6 @@ def loss_batch(model, loss_function, data, labels, opt = None):
 
 def get_loader(bs = 8, opt = False):
     data, labels = load_data()
-    print(data)
     print(data.shape)
     # print(data.shape)
     border = int(data.shape[0]*4/5)
@@ -218,8 +209,8 @@ def get_loader(bs = 8, opt = False):
 
 def parse_args():
     parser = argparse.ArgumentParser('Simple MNIST classifier')
-    parser.add_argument('--learning_rate', '-lr', default=0.0001, type=float)
-    parser.add_argument('--epochs', '-e', default=50, type=int)
+    parser.add_argument('--learning_rate', '-lr', default=0.00001, type=float)
+    parser.add_argument('--epochs', '-e', default=30, type=int)
     parser.add_argument('--batch_size', '-bs', default=8, type=int)
     return parser.parse_args()
 
@@ -286,17 +277,6 @@ def  main():
         # lab_v = example2["labels"].to(dev)
         # testv_data.append(tst_v)
         # testv_labels.append(lab_v)
-    trn_loader, val_loader, t_tst, v_tst = get_loader(8, True)
-    # t_tst, v_tst = get_loader(1)
-    for example in t_tst:
-        tst = example["rgbs"].to(dev)
-        lab = example["labels"].to(dev)
-        break
-
-    #for example in v_tst:
-       # tst_v = example["rgbs"].to(dev)
-        #lab_v = example["labels"].to(dev)
-        #break
 
     for example in val_loader:
         val_dat = example["rgbs"].to(dev)
@@ -311,7 +291,7 @@ def  main():
     model = model.to(dev)
     # m_params = list(model.parameters())
     # opt = torch.optim.Adam(m_params, args.learning_rate)
-    opt = torch.optim.Adam(model.parameters(), args.learning_rate, amsgrad=True)
+    opt = torch.optim.Adam(model.parameters(), args.learning_rate)
     #opt = torch.optim.Adam(model_params, args.learning_rate)
     #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
     res_before_training = []
@@ -322,10 +302,6 @@ def  main():
     print(before_t, after_t, val_lab)
     for i in range(len(val_lab.flatten())):
         print(before_t[i].item(), after_t[i].item(), val_lab[i].item())
-    o1 = model(tst)
-    fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
-    o2 = model(tst)
-    print(o1, o2, lab)
 
 if __name__ == "__main__":
     main()
