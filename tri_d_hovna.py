@@ -205,7 +205,7 @@ def get_loader(bs = 8, opt = False):
     labels_train = labels_train[7:t_size-7]
     
     val_stacked = []
-    for i in range(t_num):
+    for i in range(v_num):
         for j in range(15):
             tmp_arr[j] = data_val[i+j]
         stack = np.stack(tmp_arr, axis=0)
