@@ -207,12 +207,13 @@ def get_loader(bs = 8, opt = False):
     val_stacked = []
     for i in range(t_num):
         for j in range(15):
-            tmp_arr[j] = data_val[i*15 +j]
+            tmp_arr[j] = data_val[i+j]
         stack = np.stack(tmp_arr, axis=0)
         val_stacked.append(stack)
     labels_val = labels_val[7:t_size-7]
 
     print(train_stacked.shape, val_stacked.shape)
+    print(labels_train.shape)
     dataset_tr = Dataset(data_train, labels_train)
     dataset_val = Dataset(data_val, labels_val)
     if opt: 
