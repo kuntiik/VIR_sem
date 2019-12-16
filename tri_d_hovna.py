@@ -18,7 +18,7 @@ path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
 #path_pic = "audi/camera/camera/cam_front_center/"
 path_labels = "labels/"
 s = 32
-lin_s = 256*12*7
+lin_s = 512*8*4
 PIC_NUM = 15697
 # PIC_NUM_t = 15697
 PIC_NUM_t = 100
@@ -101,7 +101,14 @@ class My_CNN(torch.nn.Module):
         self.conv2 = self._make_conv_layer(s,2*s)
         self.conv3 = self._make_conv_layer(2*s, 4*s)
         self.conv4 = self._make_conv_layer(4*s, 8*s)
-        self.fc1 = nn.Linear(lin_s, 1)
+        self.conv_2d_1 = nn.Sequential(
+            nn.Conv2d(4*s, 8*s, kernel_size = 3),
+            nn.BatchNorm2d(8*s), nn.LeakyReLU(), nn.MaxPool2d((3,3)))
+        self.conv_2d_2 = nn.Sequential(
+            nn.Conv2d(8*s, 16*s, kernel_size = 3),
+            nn.BatchNorm2d(16*s), nn.LeakyReLU(), nn.MaxPool2d((2,2)))
+        self.fc1 = nn.Linear(lin_s, 4096)
+        self.fc2 = nn.Linear(4096, 1)
 
     def _make_conv_layer(self, in_c, out_c):
         conv_layer = nn.Sequential(
@@ -116,17 +123,22 @@ class My_CNN(torch.nn.Module):
         return conv_layer
 
     def forward(self, xb):
-        print("shape after convolution",xb.shape)
+        # print("shape after convolution",xb.shape)
         xb = self.conv1(xb)
-        print("shape after convolution",xb.shape)
+        # print("shape after convolution",xb.shape)
         xb = self.conv2(xb)
-        print("shape after convolution",xb.shape)
+        # print("shape after convolution",xb.shape)
         xb = self.conv3(xb)
-        print("shape after convolution",xb.shape)
-        xb = self.conv4(xb)
-        print("shape after convolution",xb.shape)
+        # print("shape after convolution",xb.shape)
+        xb = np.squeeze(xb, axis = 2)
+        xb = self.conv_2d_1(xb) 
+        # print("shape after convolution",xb.shape)
+        xb = self.conv_2d_2(xb) 
+        # print("shape after convolution",xb.shape)
         xb = xb.view(-1, lin_s)
-        xb = self.fc1(xb)
+        # print("shape after convolution",xb.shape)
+        xb = F.LeakyReLU(self.fc1(xb))
+        xb = self.fc2(xb)
         return xb
 
     def weights_initialization(self):
@@ -137,7 +149,7 @@ class My_CNN(torch.nn.Module):
 class Dataset(tdata.Dataset):
     def __init__(self, pics, labels):
         super().__init__()
-        self.pics = pics
+        self.pics =np.asarray( pics).transpose(0, 2, 1 , 3, 4)
         self.labels = labels
 
     def __len__(self):
@@ -169,13 +181,13 @@ def loss_batch(model, loss_function, data, labels, opt = None):
 
 def get_loader(bs = 8, opt = False):
     data, labels = load_data()
-    print(data)
-    print(data.shape)
+    # print(data)
+    # print(data.shape)
     # print(data.shape)
     border = int(data.shape[0]*4/5)
     data_train, data_val = np.split(data, [border])
     labels_train, labels_val = np.split(labels, [border])
-    print("data train shape je", data_train.shape)
+    # print("data train shape je", data_train.shape)
     t_size = data_train.shape[0]
     v_size = data_val.shape[0]
     t_num = t_size - 14
@@ -199,8 +211,8 @@ def get_loader(bs = 8, opt = False):
         val_stacked.append(stack)
     labels_val = labels_val[7:t_size-7]
 
-    print(np.shape(train_stacked), np.shape(val_stacked))
-    print(labels_train.shape)
+    # print(np.shape(train_stacked), np.shape(val_stacked))
+    # print(labels_train.shape)
     dataset_tr = Dataset(train_stacked, labels_train)
     dataset_val = Dataset(val_stacked, labels_val)
     trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
@@ -282,9 +294,9 @@ def  main():
         val_dat = example["rgbs"].to(dev)
         val_lab = example["labels"].to(dev)
         break
-    for example in val_loader:
-        p_val_data = example["labels"]
-        print (p_val_data.data)
+    # for example in val_loader:
+        # p_val_data = example["labels"]
+        # print (p_val_data.data)
     model = My_CNN()
     #model_params = list(model.parameters())
     #model.weights_initialization()
@@ -296,7 +308,8 @@ def  main():
     #opt=torch.optim.Adam(model.parameters(), lr=0.0005, betas=(0.9, 0.999), eps=1e-08, weight_decay=0, amsgrad=True)
     res_before_training = []
     res_after_training = []
-    before_t = model(val_dat)
+    with torch.no_grad():
+        before_t = model(val_dat)
     fit(trn_loader, val_loader,model, opt, nn.MSELoss(), args.epochs)
     after_t = model(val_dat)
     print(before_t, after_t, val_lab)
