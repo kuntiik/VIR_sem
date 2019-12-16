@@ -137,7 +137,7 @@ class My_CNN(torch.nn.Module):
         # print("shape after convolution",xb.shape)
         xb = xb.view(-1, lin_s)
         # print("shape after convolution",xb.shape)
-        xb = F.LeakyReLU(self.fc1(xb))
+        xb = F.relu(self.fc1(xb))
         xb = self.fc2(xb)
         return xb
 
