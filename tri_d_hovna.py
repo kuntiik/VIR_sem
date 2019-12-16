@@ -97,47 +97,34 @@ class My_CNN(torch.nn.Module):
     def __init__(self):
         super(My_CNN, self).__init__()
         #super().__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels = s, kernel_size=5, stride=1, padding=0)
-        self.conv11 = nn.Conv2d(in_channels=s, out_channels = s, kernel_size=3, stride=1, padding=0)
-        self.conv2 = nn.Conv2d(in_channels=s, out_channels = 2*s, kernel_size=3, stride=1, padding=0)
-        self.conv22 = nn.Conv2d(in_channels=2*s, out_channels = 2*s, kernel_size=3, stride=1, padding=0)
-        self.conv3 = nn.Conv2d(in_channels=2*s, out_channels = 4*s, kernel_size=3, stride=1, padding=0)
-        self.conv33 = nn.Conv2d(in_channels=4*s, out_channels = 4*s, kernel_size=3, stride=1, padding=0)
-        self.conv4 = nn.Conv2d(in_channels=4*s, out_channels = 8*s, kernel_size=3, stride=1, padding=0)
-        self.conv5 = nn.Conv2d(in_channels=8*s, out_channels = 8*s, kernel_size=3, stride=1, padding=0)
-        #self.mp = nn.Maxpool2d(kernel_size = 2)
-        self.bn1=torch.nn.BatchNorm2d(s)
-        self.bn2=torch.nn.BatchNorm2d(2*s)
-        self.bn3=torch.nn.BatchNorm2d(4*s)
-        self.bn4=torch.nn.BatchNorm2d(8*s)
-        self.pool=torch.nn.MaxPool2d(kernel_size=2)
-#
-#        self.convs = torch.nn.Sequential(conv1, torch.nn.ReLU(), torch.nn.BatchNorm2d(s),torch.nn.MaxPool2d(kernel_size=3), \
-#           conv2, torch.nn.ReLU(), torch.nn.BatchNorm2d(2*s),torch.nn.MaxPool2d(kernel_size=3),conv3, torch.nn.ReLU()), torch.nn.BatchNorm2d(4*s), \
-#            conv4, torch.nn.ReLU()
+        self.conv1 = self._make_conv_layer(3,s)
+        self.conv2 = self._make_conv_layer(s,2*s)
+        self.conv3 = self._make_conv_layer(2*s, 4*s)
+        self.conv4 = self._make_conv_layer(4*s, 8*s)
         self.fc1 = nn.Linear(lin_s, 1)
+
+    def _make_conv_layer(self, in_c, out_c):
+        conv_layer = nn.Sequential(
+        nn.Conv3d(in_c, out_c, kernel_size=(2, 3, 3), padding=0),
+        nn.BatchNorm3d(out_c),
+        nn.LeakyReLU(),
+        nn.Conv3d(out_c, out_c, kernel_size=(2, 3, 3), padding=1),
+        nn.BatchNorm3d(out_c),
+        nn.LeakyReLU(),
+        nn.MaxPool3d((2, 2, 2)),
+        )
+        return conv_layer
+
     def forward(self, xb):
-        # print(xb.shape)
-        xb = F.relu(self.conv1(xb))
-        xb = self.pool(self.bn1(F.relu(self.conv11(xb))))
-        xb = F.relu(self.conv2(xb))
-        xb = self.pool(self.bn2(F.relu(self.conv22(xb))))
-        xb = F.relu(self.conv3(xb))
-        xb = self.pool(self.bn3(F.relu(self.conv33(xb))))
-        xb = self.pool(self.bn4(F.relu(self.conv4(xb))))
-        xb = self.pool(F.relu(self.conv5(xb)))
-        # print(xb.shape,"shape after convs")
-        # print(xb.shape,"shape after convs")
-#TODO size is too small ( i think 20*15 should be ideal) and now we have 2*1 :D
-        # xb = F.relu(self.conv4(xb))
-        # print(xb.shape,"shape after convs")
-        #xb = F.relu(self.conv1(xb))
-        #xb = F.relu(self.conv2(xb))
-        #xb = self.mp(xb)
-        #xb = F.relu(self.conv3(xb))
-        #xb = F.relu(self.conv4(xb))
-        #xb = self.mp(xb)
-        #xb=self.convs(xb)
+        print("shape after convolution",xb.shape)
+        xb = self.conv1(xb)
+        print("shape after convolution",xb.shape)
+        xb = self.conv2(xb)
+        print("shape after convolution",xb.shape)
+        xb = self.conv3(xb)
+        print("shape after convolution",xb.shape)
+        xb = self.conv4(xb)
+        print("shape after convolution",xb.shape)
         xb = xb.view(-1, lin_s)
         xb = self.fc1(xb)
         return xb
@@ -214,23 +201,11 @@ def get_loader(bs = 8, opt = False):
 
     print(np.shape(train_stacked), np.shape(val_stacked))
     print(labels_train.shape)
-    dataset_tr = Dataset(data_train, labels_train)
-    dataset_val = Dataset(data_val, labels_val)
-    if opt: 
-        trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
-        val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
-
-#some validation (just need some data from loader)
-        dataset_tr_tst = Dataset(data_train[1:10], labels_train[1:10])
-        dataset_val_tst = Dataset(data_val[1:10], labels_val[1:10])
-        tst_trn_loader = tdata.DataLoader(dataset_tr_tst, batch_size = 1, shuffle = True)
-        tst_val_loader = tdata.DataLoader(dataset_val_tst, batch_size = 1)
-        return trn_loader, val_loader, tst_trn_loader, tst_val_loader
-    
-    else:
-        trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
-        val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
-        return trn_loader, val_loader
+    dataset_tr = Dataset(train_stacked, labels_train)
+    dataset_val = Dataset(val_stacked, labels_val)
+    trn_loader = tdata.DataLoader(dataset_tr, batch_size = bs, shuffle = True)
+    val_loader = tdata.DataLoader(dataset_val, batch_size = bs*2)
+    return trn_loader, val_loader
 
 def parse_args():
     parser = argparse.ArgumentParser('Simple MNIST classifier')
