@@ -77,3 +77,8 @@ def load_data():
     elapsed1 = time.time() - st1
     print("time to get pictures: ",elapsed1, "s")
     return pics
+def main():
+    load_data()
+
+if __name__ == "__main__":
+    main()

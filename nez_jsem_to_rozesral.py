@@ -14,37 +14,18 @@ import torchvision
 WIDTH = 1920
 HEIGHT = 1208
 path = "/local/temporary/audi/camera/"
-path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
+# path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
+path_pic = "pics_selected/"
 #path_pic = "audi/camera/camera/cam_front_center/"
-path_labels = "labels/"
+path_labels = "labels_selected/"
 s = 32
 lin_s = 256*12*7
 PIC_NUM = 15697
-# PIC_NUM_t = 15697
-PIC_NUM_t = 100
+PIC_NUM_t = 15697
+#PIC_NUM_t = 100
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
-def get_frequency():
-    freq = []
-    json_freq=[]  #buffer, ktery nese informaci o jednotlivych obrazcich, do ktere skupiny uhlu patri
-    for i in range(220):
-        freq.append(0)
-    for i in range(PIC_NUM):
-        json_freq.append(0)
-    counter=0
-    for name in os.listdir(path_labels):
-        f = open(path_labels + name, "rb")
-        angl = json.load(f)['Angle']
-        mag = int(abs(angl)//6)
-        #if mag >= 60:
-            #print(mag, angl)
-        f.close()
-        freq[mag] += 1
-        json_freq[counter] = mag 
-        # json_freq.append(mag)
-        counter+=1
-    return freq, json_freq
 
 def load_data():
     pics = []
@@ -53,18 +34,10 @@ def load_data():
     im_h = 302
     i = 0 
     st1 = time.time()
-    freq, json_freq=get_frequency()
-    freq_checker=[]
-    for l in range(220):
-        freq_checker.append(0)
-
     for name in sorted(os.listdir(path_pic)):
         if name.endswith('.png'):
-            freq_checker[json_freq[i]] += 1
-            if freq_checker[json_freq[i]] < 800: #horni hranice pro pocet stejnych uhlu, ktere chceme nacist
-                img = cv2.imread(os.path.join(path_pic, name))
-                img = cv2.resize(img, (im_w, im_h))
-                pics.append(img.transpose(2,1,0))
+            img = cv2.imread(os.path.join(path_pic, name))
+            pics.append(img.transpose(2,1,0))
             i += 1
             if i == PIC_NUM_t:
     #TODO uncoment, just to speed things up
@@ -76,14 +49,10 @@ def load_data():
     i = 0
     st2 = time.time()
 
-    for l in range(220):
-        freq_checker[l] = 0
     for name in sorted(os.listdir(path_labels)):
-        freq_checker[json_freq[i]] += 1
-        if freq_checker[json_freq[i]] < 800:
-            f = open(path_labels + name, "rb")
-            labels.append(json.load(f)['Angle'])
-            f.close()
+        f = open(path_labels + name, "rb")
+        labels.append(json.load(f)['Angle'])
+        f.close()
         i += 1
         if i  ==  PIC_NUM_t:
 #TODO uncoment, just to speed things up
@@ -187,7 +156,6 @@ def get_loader(bs = 8, opt = False):
     border = int(data.shape[0]*4/5)
     np.random.shuffle(data)
     data_train, data_val = np.split(data, [border])
-    print(data_train.shape, data_val.shape)
     labels_train, labels_val = np.split(labels, [border])
     dataset_tr = Dataset(data_train, labels_train)
     dataset_val = Dataset(data_val, labels_val)
@@ -225,8 +193,10 @@ def fit(train_dl, val_dl, model, opt, loss_fun, epochs):
             # print(data.shape)
             data = data.to(dev)
             labels = labels.to(dev)
+            model.train()
             loss_batch(model, loss_fun, data, labels, opt)
             # print(i, end=" ")
+            model.eval()
             with torch.no_grad():
                 value, num = loss_batch(model, loss_fun, data, labels)
                 acc = (num*value + processed * acc)/(num + processed)
@@ -282,9 +252,6 @@ def  main():
         val_dat = example["rgbs"].to(dev)
         val_lab = example["labels"].to(dev)
         break
-    for example in val_loader:
-        p_val_data = example["labels"]
-        print (p_val_data.data)
     model = My_CNN()
     #model_params = list(model.parameters())
     #model.weights_initialization()
