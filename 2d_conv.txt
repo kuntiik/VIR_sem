@@ -1,0 +1,253 @@
+Pocet obrazku je:  7753
+time to get pictures:  46.29034352302551 s
+time to get labels:  3.003983974456787 s
+(7753, 3, 480, 302)
+Epoch: 1/100 	 Training set accuracy: 16018.26907
+Epoch: 1/100 	 Validation set accuracy: 16036.45076
+Epoch: 2/100 	 Training set accuracy: 15922.29071
+Epoch: 2/100 	 Validation set accuracy: 16663.12961
+Epoch: 3/100 	 Training set accuracy: 15883.67515
+Epoch: 3/100 	 Validation set accuracy: 16919.63232
+Epoch: 4/100 	 Training set accuracy: 15829.34914
+Epoch: 4/100 	 Validation set accuracy: 16662.78218
+Epoch: 5/100 	 Training set accuracy: 15776.60782
+Epoch: 5/100 	 Validation set accuracy: 16849.93728
+Epoch: 6/100 	 Training set accuracy: 15694.90983
+Epoch: 6/100 	 Validation set accuracy: 17951.37977
+Epoch: 7/100 	 Training set accuracy: 15530.19879
+Epoch: 7/100 	 Validation set accuracy: 17132.55613
+Epoch: 8/100 	 Training set accuracy: 15137.55968
+Epoch: 8/100 	 Validation set accuracy: 18232.67473
+Epoch: 9/100 	 Training set accuracy: 14000.77834
+Epoch: 9/100 	 Validation set accuracy: 20169.31158
+Epoch: 10/100 	 Training set accuracy: 12351.25957
+Epoch: 10/100 	 Validation set accuracy: 18099.83604
+Epoch: 11/100 	 Training set accuracy: 11025.88736
+Epoch: 11/100 	 Validation set accuracy: 19866.28337
+Epoch: 12/100 	 Training set accuracy: 9996.02564
+Epoch: 12/100 	 Validation set accuracy: 19999.88354
+Epoch: 13/100 	 Training set accuracy: 8788.43334
+Epoch: 13/100 	 Validation set accuracy: 24595.23091
+Epoch: 14/100 	 Training set accuracy: 8521.89795
+Epoch: 14/100 	 Validation set accuracy: 26066.01235
+Epoch: 15/100 	 Training set accuracy: 7606.04542
+Epoch: 15/100 	 Validation set accuracy: 21954.68774
+Epoch: 16/100 	 Training set accuracy: 7020.06673
+Epoch: 16/100 	 Validation set accuracy: 25273.76660
+Epoch: 17/100 	 Training set accuracy: 6637.63704
+Epoch: 17/100 	 Validation set accuracy: 23121.71105
+Epoch: 18/100 	 Training set accuracy: 6156.27954
+Epoch: 18/100 	 Validation set accuracy: 22598.12476
+Epoch: 19/100 	 Training set accuracy: 5570.95503
+Epoch: 19/100 	 Validation set accuracy: 26094.81559
+Epoch: 20/100 	 Training set accuracy: 5169.81903
+Epoch: 20/100 	 Validation set accuracy: 25378.26702
+Epoch: 21/100 	 Training set accuracy: 4931.04665
+Epoch: 21/100 	 Validation set accuracy: 20532.60181
+Epoch: 22/100 	 Training set accuracy: 4561.05126
+Epoch: 22/100 	 Validation set accuracy: 23519.51091
+Epoch: 23/100 	 Training set accuracy: 4261.10848
+Epoch: 23/100 	 Validation set accuracy: 24191.56638
+Epoch: 24/100 	 Training set accuracy: 4062.97560
+Epoch: 24/100 	 Validation set accuracy: 24275.44804
+Epoch: 25/100 	 Training set accuracy: 3818.00742
+Epoch: 25/100 	 Validation set accuracy: 24338.97536
+Epoch: 26/100 	 Training set accuracy: 3674.71409
+Epoch: 26/100 	 Validation set accuracy: 26672.43876
+Epoch: 27/100 	 Training set accuracy: 3535.74933
+Epoch: 27/100 	 Validation set accuracy: 20113.51697
+Epoch: 28/100 	 Training set accuracy: 3268.52604
+Epoch: 28/100 	 Validation set accuracy: 21762.35280
+Epoch: 29/100 	 Training set accuracy: 3172.93571
+Epoch: 29/100 	 Validation set accuracy: 22243.23729
+Epoch: 30/100 	 Training set accuracy: 3041.19727
+Epoch: 30/100 	 Validation set accuracy: 25366.26972
+Epoch: 31/100 	 Training set accuracy: 2834.22380
+Epoch: 31/100 	 Validation set accuracy: 21683.90156
+Epoch: 32/100 	 Training set accuracy: 2643.91563
+Epoch: 32/100 	 Validation set accuracy: 21389.92426
+Epoch: 33/100 	 Training set accuracy: 2625.38050
+Epoch: 33/100 	 Validation set accuracy: 22370.19997
+Epoch: 34/100 	 Training set accuracy: 2528.35428
+Epoch: 34/100 	 Validation set accuracy: 24853.96583
+Epoch: 35/100 	 Training set accuracy: 2477.75928
+Epoch: 35/100 	 Validation set accuracy: 22113.88334
+Epoch: 36/100 	 Training set accuracy: 2417.56040
+Epoch: 36/100 	 Validation set accuracy: 20225.37944
+Epoch: 37/100 	 Training set accuracy: 2358.84946
+Epoch: 37/100 	 Validation set accuracy: 24325.55468
+Epoch: 38/100 	 Training set accuracy: 2172.20264
+Epoch: 38/100 	 Validation set accuracy: 24950.58262
+Epoch: 39/100 	 Training set accuracy: 2097.32445
+Epoch: 39/100 	 Validation set accuracy: 26476.39535
+Epoch: 40/100 	 Training set accuracy: 2111.51182
+Epoch: 40/100 	 Validation set accuracy: 23179.28877
+Epoch: 41/100 	 Training set accuracy: 1986.25972
+Epoch: 41/100 	 Validation set accuracy: 21408.86477
+Epoch: 42/100 	 Training set accuracy: 1981.40366
+Epoch: 42/100 	 Validation set accuracy: 21878.49264
+Epoch: 43/100 	 Training set accuracy: 1951.17204
+Epoch: 43/100 	 Validation set accuracy: 21339.22255
+Epoch: 44/100 	 Training set accuracy: 1804.46407
+Epoch: 44/100 	 Validation set accuracy: 24463.61717
+Epoch: 45/100 	 Training set accuracy: 1888.76086
+Epoch: 45/100 	 Validation set accuracy: 22677.12946
+Epoch: 46/100 	 Training set accuracy: 1763.67572
+Epoch: 46/100 	 Validation set accuracy: 21126.41678
+Epoch: 47/100 	 Training set accuracy: 1759.12948
+Epoch: 47/100 	 Validation set accuracy: 22751.13844
+Epoch: 48/100 	 Training set accuracy: 1792.23171
+Epoch: 48/100 	 Validation set accuracy: 22690.32356
+Epoch: 49/100 	 Training set accuracy: 1670.97508
+Epoch: 49/100 	 Validation set accuracy: 21037.69846
+Epoch: 50/100 	 Training set accuracy: 1640.68367
+Epoch: 50/100 	 Validation set accuracy: 22581.85933
+Epoch: 51/100 	 Training set accuracy: 1694.57900
+Epoch: 51/100 	 Validation set accuracy: 19689.73641
+Epoch: 52/100 	 Training set accuracy: 1651.76197
+Epoch: 52/100 	 Validation set accuracy: 22715.88002
+Epoch: 53/100 	 Training set accuracy: 1535.74430
+Epoch: 53/100 	 Validation set accuracy: 22434.89435
+Epoch: 54/100 	 Training set accuracy: 1614.96002
+Epoch: 54/100 	 Validation set accuracy: 19739.24271
+Epoch: 55/100 	 Training set accuracy: 1534.97051
+Epoch: 55/100 	 Validation set accuracy: 20473.53606
+Epoch: 56/100 	 Training set accuracy: 1529.57375
+Epoch: 56/100 	 Validation set accuracy: 19634.46433
+Epoch: 57/100 	 Training set accuracy: 1497.96469
+Epoch: 57/100 	 Validation set accuracy: 24003.89992
+Epoch: 58/100 	 Training set accuracy: 1479.95223
+Epoch: 58/100 	 Validation set accuracy: 21840.63968
+Epoch: 59/100 	 Training set accuracy: 1427.28821
+Epoch: 59/100 	 Validation set accuracy: 19084.37567
+Epoch: 60/100 	 Training set accuracy: 1462.51480
+Epoch: 60/100 	 Validation set accuracy: 20512.75287
+Epoch: 61/100 	 Training set accuracy: 1439.18633
+Epoch: 61/100 	 Validation set accuracy: 21793.28261
+Epoch: 62/100 	 Training set accuracy: 1481.12938
+Epoch: 62/100 	 Validation set accuracy: 21869.77340
+Epoch: 63/100 	 Training set accuracy: 1382.29759
+Epoch: 63/100 	 Validation set accuracy: 21139.21958
+Epoch: 64/100 	 Training set accuracy: 1402.75162
+Epoch: 64/100 	 Validation set accuracy: 20255.68192
+Epoch: 65/100 	 Training set accuracy: 1358.45741
+Epoch: 65/100 	 Validation set accuracy: 20497.97093
+Epoch: 66/100 	 Training set accuracy: 1311.32604
+Epoch: 66/100 	 Validation set accuracy: 21116.03648
+Epoch: 67/100 	 Training set accuracy: 1375.24509
+Epoch: 67/100 	 Validation set accuracy: 21409.73461
+Epoch: 68/100 	 Training set accuracy: 1271.96300
+Epoch: 68/100 	 Validation set accuracy: 21567.41175
+Epoch: 69/100 	 Training set accuracy: 1269.08465
+Epoch: 69/100 	 Validation set accuracy: 21220.33039
+Epoch: 70/100 	 Training set accuracy: 1278.45137
+Epoch: 70/100 	 Validation set accuracy: 20266.29761
+Epoch: 71/100 	 Training set accuracy: 1314.77139
+Epoch: 71/100 	 Validation set accuracy: 19955.58299
+Epoch: 72/100 	 Training set accuracy: 1277.81964
+Epoch: 72/100 	 Validation set accuracy: 19638.26352
+Epoch: 73/100 	 Training set accuracy: 1259.12013
+Epoch: 73/100 	 Validation set accuracy: 21198.90447
+Epoch: 74/100 	 Training set accuracy: 1200.56825
+Epoch: 74/100 	 Validation set accuracy: 19938.75499
+Epoch: 75/100 	 Training set accuracy: 1229.51628
+Epoch: 75/100 	 Validation set accuracy: 21165.37216
+Epoch: 76/100 	 Training set accuracy: 1248.65594
+Epoch: 76/100 	 Validation set accuracy: 20180.50216
+Epoch: 77/100 	 Training set accuracy: 1216.16386
+Epoch: 77/100 	 Validation set accuracy: 19377.67129
+Epoch: 78/100 	 Training set accuracy: 1196.09232
+Epoch: 78/100 	 Validation set accuracy: 19379.14143
+Epoch: 79/100 	 Training set accuracy: 1180.08154
+Epoch: 79/100 	 Validation set accuracy: 22630.45611
+Epoch: 80/100 	 Training set accuracy: 1226.56724
+Epoch: 80/100 	 Validation set accuracy: 19187.00594
+Epoch: 81/100 	 Training set accuracy: 1173.73509
+Epoch: 81/100 	 Validation set accuracy: 20533.31240
+Epoch: 82/100 	 Training set accuracy: 1193.06920
+Epoch: 82/100 	 Validation set accuracy: 20266.37968
+Epoch: 83/100 	 Training set accuracy: 1161.96985
+Epoch: 83/100 	 Validation set accuracy: 20746.68481
+Epoch: 84/100 	 Training set accuracy: 1161.81676
+Epoch: 84/100 	 Validation set accuracy: 20608.45228
+Epoch: 85/100 	 Training set accuracy: 1213.60799
+Epoch: 85/100 	 Validation set accuracy: 20645.24162
+Epoch: 86/100 	 Training set accuracy: 1147.85706
+Epoch: 86/100 	 Validation set accuracy: 20895.36624
+Epoch: 87/100 	 Training set accuracy: 1070.99086
+Epoch: 87/100 	 Validation set accuracy: 19703.23645
+Epoch: 88/100 	 Training set accuracy: 1140.43913
+Epoch: 88/100 	 Validation set accuracy: 19613.07383
+Epoch: 89/100 	 Training set accuracy: 1070.22105
+Epoch: 89/100 	 Validation set accuracy: 20141.47804
+Epoch: 90/100 	 Training set accuracy: 1193.03497
+Epoch: 90/100 	 Validation set accuracy: 18994.44064
+Epoch: 91/100 	 Training set accuracy: 1117.83625
+Epoch: 91/100 	 Validation set accuracy: 19405.88354
+Epoch: 92/100 	 Training set accuracy: 1053.93846
+Epoch: 92/100 	 Validation set accuracy: 20233.39296
+Epoch: 93/100 	 Training set accuracy: 1106.27342
+Epoch: 93/100 	 Validation set accuracy: 21905.58588
+Epoch: 94/100 	 Training set accuracy: 1102.95351
+Epoch: 94/100 	 Validation set accuracy: 21341.83374
+Epoch: 95/100 	 Training set accuracy: 1083.34374
+Epoch: 95/100 	 Validation set accuracy: 18657.87811
+Epoch: 96/100 	 Training set accuracy: 1031.71297
+Epoch: 96/100 	 Validation set accuracy: 20267.38270
+Epoch: 97/100 	 Training set accuracy: 1041.76908
+Epoch: 97/100 	 Validation set accuracy: 18457.19393
+Epoch: 98/100 	 Training set accuracy: 1066.86463
+Epoch: 98/100 	 Validation set accuracy: 20498.31836
+Epoch: 99/100 	 Training set accuracy: 1042.05248
+Epoch: 99/100 	 Validation set accuracy: 19587.32789
+Epoch: 100/100 	 Training set accuracy: 987.82511
+Epoch: 100/100 	 Validation set accuracy: 19857.44353
+tensor([[-0.0490],
+        [-0.2896],
+        [-0.8789],
+        [-0.0675],
+        [-0.9296],
+        [-0.9634],
+        [-0.0905],
+        [-0.2661],
+        [-0.1299],
+        [-1.1856],
+        [-0.6592],
+        [-0.5979],
+        [-0.0491],
+        [ 0.2340],
+        [-0.3625],
+        [-0.3316]], device='cuda:0', grad_fn=<AddmmBackward>) tensor([[ -70.3074],
+        [ -70.6075],
+        [  30.0475],
+        [ 303.0920],
+        [  25.5024],
+        [  13.5339],
+        [  43.5825],
+        [-100.3949],
+        [ -35.2430],
+        [  25.8643],
+        [ -44.8094],
+        [  19.9031],
+        [  25.2916],
+        [ -38.6347],
+        [  14.4301],
+        [ -50.2596]], device='cuda:0', grad_fn=<AddmmBackward>) tensor([-111.7500, -112.0500, -112.8000, -112.9500, -113.2500, -113.7000,
+        -113.8500, -113.8500, -113.8500, -113.8500, -113.7000, -113.7000,
+        -113.7000, -113.8500, -113.8500, -113.8500], device='cuda:0')
+-0.04901358112692833 -70.30738067626953 -111.75
+-0.2896274924278259 -70.6075439453125 -112.05000305175781
+-0.8789317011833191 30.047460556030273 -112.80000305175781
+-0.06751162558794022 303.09197998046875 -112.94999694824219
+-0.9295676946640015 25.502355575561523 -113.25
+-0.9633511900901794 13.533884048461914 -113.69999694824219
+-0.09054683893918991 43.5825309753418 -113.8499984741211
+-0.2660975456237793 -100.3949203491211 -113.8499984741211
+-0.1298748105764389 -35.242950439453125 -113.8499984741211
+-1.1855669021606445 25.864328384399414 -113.8499984741211
+-0.6592116951942444 -44.8094367980957 -113.69999694824219
+-0.5979490280151367 19.903093338012695 -113.69999694824219
+-0.0490652434527874 25.29160499572754 -113.69999694824219
+0.23402456939220428 -38.634742736816406 -113.8499984741211
+-0.36253049969673157 14.430075645446777 -113.8499984741211
+-0.33164381980895996 -50.25960159301758 -113.8499984741211

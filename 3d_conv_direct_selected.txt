@@ -1,0 +1,124 @@
+Traceback (most recent call last):
+  File "3dconv_direct_loading_selected.py", line 5, in <module>
+    from torch import nn
+ImportError: No module named 'torch'
+ 
+Time to train one epoch is 0.0hod 31.0min 10.22947907447815s
+Epoch: 1/30 	 Training set accuracy: 11967.03792
+Epoch: 1/30 	 Validation set accuracy: 4726.17460
+ 
+Time to train one epoch is 0.0hod 20.0min 57.715675592422485s
+Epoch: 2/30 	 Training set accuracy: 2765.93709
+Epoch: 2/30 	 Validation set accuracy: 1735.25391
+ 
+Time to train one epoch is 0.0hod 20.0min 49.82393932342529s
+Epoch: 3/30 	 Training set accuracy: 1398.16805
+Epoch: 3/30 	 Validation set accuracy: 1216.04814
+ 
+Time to train one epoch is 0.0hod 20.0min 50.15954399108887s
+Epoch: 4/30 	 Training set accuracy: 1049.86335
+Epoch: 4/30 	 Validation set accuracy: 901.75309
+ 
+Time to train one epoch is 0.0hod 20.0min 49.952648639678955s
+Epoch: 5/30 	 Training set accuracy: 861.57760
+Epoch: 5/30 	 Validation set accuracy: 734.31892
+ 
+Time to train one epoch is 0.0hod 20.0min 45.750075817108154s
+Epoch: 6/30 	 Training set accuracy: 692.42704
+Epoch: 6/30 	 Validation set accuracy: 770.62454
+ 
+Time to train one epoch is 0.0hod 20.0min 43.48729753494263s
+Epoch: 7/30 	 Training set accuracy: 606.47689
+Epoch: 7/30 	 Validation set accuracy: 600.17602
+ 
+Time to train one epoch is 0.0hod 20.0min 43.716389894485474s
+Epoch: 8/30 	 Training set accuracy: 496.71773
+Epoch: 8/30 	 Validation set accuracy: 453.02936
+ 
+Time to train one epoch is 0.0hod 20.0min 46.817017793655396s
+Epoch: 9/30 	 Training set accuracy: 442.94573
+Epoch: 9/30 	 Validation set accuracy: 385.74925
+ 
+Time to train one epoch is 0.0hod 20.0min 44.364187479019165s
+Epoch: 10/30 	 Training set accuracy: 389.65708
+Epoch: 10/30 	 Validation set accuracy: 453.82234
+ 
+Time to train one epoch is 0.0hod 20.0min 46.741570711135864s
+Epoch: 11/30 	 Training set accuracy: 346.05540
+Epoch: 11/30 	 Validation set accuracy: 317.63546
+ 
+Time to train one epoch is 0.0hod 20.0min 46.32142639160156s
+Epoch: 12/30 	 Training set accuracy: 301.61247
+Epoch: 12/30 	 Validation set accuracy: 494.08014
+ 
+Time to train one epoch is 0.0hod 20.0min 45.61184811592102s
+Epoch: 13/30 	 Training set accuracy: 258.97153
+Epoch: 13/30 	 Validation set accuracy: 273.68265
+ 
+Time to train one epoch is 0.0hod 21.0min 22.391698122024536s
+Epoch: 14/30 	 Training set accuracy: 241.63452
+Epoch: 14/30 	 Validation set accuracy: 439.73684
+ 
+Time to train one epoch is 0.0hod 20.0min 51.282599210739136s
+Epoch: 15/30 	 Training set accuracy: 219.39048
+Epoch: 15/30 	 Validation set accuracy: 531.40495
+ 
+Time to train one epoch is 0.0hod 20.0min 47.67866039276123s
+Epoch: 16/30 	 Training set accuracy: 200.17513
+Epoch: 16/30 	 Validation set accuracy: 202.46150
+ 
+Time to train one epoch is 0.0hod 20.0min 47.33264517784119s
+Epoch: 17/30 	 Training set accuracy: 184.96503
+Epoch: 17/30 	 Validation set accuracy: 463.92887
+ 
+Time to train one epoch is 0.0hod 20.0min 45.95645594596863s
+Epoch: 18/30 	 Training set accuracy: 166.31967
+Epoch: 18/30 	 Validation set accuracy: 187.60435
+ 
+Time to train one epoch is 0.0hod 20.0min 38.83606433868408s
+Epoch: 19/30 	 Training set accuracy: 146.29758
+Epoch: 19/30 	 Validation set accuracy: 199.29459
+ 
+Time to train one epoch is 0.0hod 20.0min 39.05452346801758s
+Epoch: 20/30 	 Training set accuracy: 144.50150
+Epoch: 20/30 	 Validation set accuracy: 150.58802
+ 
+Time to train one epoch is 0.0hod 20.0min 41.574865102767944s
+Epoch: 21/30 	 Training set accuracy: 139.37538
+Epoch: 21/30 	 Validation set accuracy: 142.34394
+ 
+Time to train one epoch is 0.0hod 20.0min 38.98701882362366s
+Epoch: 22/30 	 Training set accuracy: 127.78706
+Epoch: 22/30 	 Validation set accuracy: 147.61748
+ 
+Time to train one epoch is 0.0hod 20.0min 40.22057366371155s
+Epoch: 23/30 	 Training set accuracy: 118.48807
+Epoch: 23/30 	 Validation set accuracy: 133.17425
+ 
+Time to train one epoch is 0.0hod 20.0min 38.797651290893555s
+Epoch: 24/30 	 Training set accuracy: 110.58397
+Epoch: 24/30 	 Validation set accuracy: 115.73712
+ 
+Time to train one epoch is 0.0hod 20.0min 40.682862281799316s
+Epoch: 25/30 	 Training set accuracy: 102.25268
+Epoch: 25/30 	 Validation set accuracy: 194.96891
+ 
+Time to train one epoch is 0.0hod 20.0min 41.318684816360474s
+Epoch: 26/30 	 Training set accuracy: 105.25584
+Epoch: 26/30 	 Validation set accuracy: 116.48028
+ 
+Time to train one epoch is 0.0hod 20.0min 37.85389447212219s
+Epoch: 27/30 	 Training set accuracy: 95.10581
+Epoch: 27/30 	 Validation set accuracy: 163.49938
+ 
+Time to train one epoch is 0.0hod 20.0min 42.025249004364014s
+Epoch: 28/30 	 Training set accuracy: 89.64096
+Epoch: 28/30 	 Validation set accuracy: 109.50613
+ 
+Time to train one epoch is 0.0hod 20.0min 42.34241223335266s
+Epoch: 29/30 	 Training set accuracy: 81.03588
+Epoch: 29/30 	 Validation set accuracy: 103.38226
+ 
+Time to train one epoch is 0.0hod 20.0min 44.898245334625244s
+Epoch: 30/30 	 Training set accuracy: 77.60522
+Epoch: 30/30 	 Validation set accuracy: 104.97353

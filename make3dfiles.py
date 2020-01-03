@@ -17,15 +17,15 @@ WIDTH = 1920
 HEIGHT = 1208
 path = "/local/temporary/audi/camera/"
 #path_pic = "/local/temporary/audi/camera/camera/cam_front_center/"
-path_pic = "pics_all"
+path_pic = "pics_selected"
 #path_pic = "audi/camera/camera/cam_front_center/"
-path_labels = "labels/"
+path_labels = "labels_selected"
 s = 8 
 lin_s = 16*s*8*4
 frame_size = 11
 # PIC_NUM_t = 2000
-trn_folder = '3d_train'
-val_folder = '3d_val'
+trn_folder = '3d_train_selected'
+val_folder = '3d_val_selected'
 
 dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 # shutil.rmtree(trn_folder)
